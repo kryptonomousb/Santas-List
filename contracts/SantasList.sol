@@ -119,7 +119,8 @@ contract SantasList is ERC721, TokenUri {
      * @param status The status of the person
      */
 
-     //@audit - Anyone can check list or change list
+     //@audit - no security on checklist function.  Anyone can add / change status 
+     //      missing  onlySanta modifier
     function checkList(address person, Status status) external {
         s_theListCheckedOnce[person] = status;
         emit CheckedOnce(person, status);
@@ -147,7 +148,9 @@ contract SantasList is ERC721, TokenUri {
      * This should not be callable until Christmas 2023 (give or take 24 hours), and addresses should not be able to collect more than once.
      */
 
-     //@audit  can reenter
+     //@audit - vuneriable due to msg.sender can bypass balanceOf(msg.sender) > 0 by
+     //  transferring the NFT to another account.   to fix add a mapping collected(address => true);
+     //  with a checks feature.
     function collectPresent() external {
         if (block.timestamp < CHRISTMAS_2023_BLOCK_TIME) {
             revert SantasList__NotChristmasYet();
@@ -170,12 +173,14 @@ contract SantasList is ERC721, TokenUri {
     }
 
     /* 
-     * @notice Buy a present for someone else. This should only be callable by someone who is naughty.
+     * @notice Buy a present for someone else. This should only be callable by anyone with SantaTokens.
      * @dev You'll first need to approve the SantasList contract to spend your SantaTokens.
      */
 
-     //@audit buyPresent does not check if  buyer has enough tokens.   checks + balances
 
+     //@audit any user can purchase presents not from their own account.
+     //  make sure the person calling is the owner of the present.  Also check
+     //  if they have a balance to purchase 
     function buyPresent(address presentReceiver) external {
         i_santaToken.burn(presentReceiver);
         _mintAndIncrement();

@@ -1,7 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.22;
 
-import {ERC20} from "@solmate/src/tokens/ERC20.sol";
+import {ERC20} from "solmate/src/tokens/ERC20.sol";
+
+
+
 
 /* 
  * @title SantaToken
@@ -26,6 +29,7 @@ contract SantaToken is ERC20 {
             revert SantaToken__NotSantasList();
         }
         _mint(to, 1e18);
+
     }
 // @audit burn has no security
     function burn(address from) external {
