@@ -31,6 +31,6 @@ The codebase is broken up into 3 contracts:
 ## FINDINGS
 
  Santas List Contract
-    `✔ EXPLOIT: CHECKLIST POC Anyone can add/ change the Nice List Not just SANTA (60ms)`
-    `✔ EXPLOIT: Collect Present POC - BYPASS already collected and collect another (95ms)`
-    `✔ EXPLOIT:  No LIMIT POC - NFT / TOKEN MINT forever (2821ms)`
+- `✔ EXPLOIT: CHECKLIST POC Anyone can add/ change the Nice List Not just SANTA (60ms)`
+- `✔ EXPLOIT: Collect Present POC - BYPASS already collected and collect another (95ms)`
+- `✔ EXPLOIT:  No LIMIT POC - NFT / TOKEN MINT forever (2821ms)`
