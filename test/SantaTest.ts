@@ -9,23 +9,6 @@ import { time } from "@nomicfoundation/hardhat-network-helpers";
 
 var colors = require('colors');
 colors.enable();
-/*
-[PASS] testBuyPresent() (gas: 204348)
-
-
-
-[PASS] testCantCollectPresentUnlessAtLeastNice() (gas: 67636)
-
-
-
-
-
-[PASS] testGetSantaToken() (gas: 7745)
-[PASS] testOnlyListCanBurnTokens() (gas: 10616)
-[PASS] testOnlyListCanMintTokens() (gas: 10672)
-[FAIL. Reason: Failed to execute command: program not found] testPwned() (gas: 6431)
-[PASS] testTokenURI() (gas: 1001383)
-*/
 
 
 describe("Santas List Contract", function(){
@@ -54,16 +37,13 @@ describe("Santas List Contract", function(){
         }
       },
     */
-
    let santaToken_contract = await santasList.connect(santa).getSantaToken();
-   //santatoken = await deployContract('SantaToken', [santasList.target], santa);
-   //[PASS] testGetSantaToken() (gas: 7745)
    santatoken = await ethers.getContractAt('SantaToken',santaToken_contract);
 
 });
 
     it("Checking Deployment and who is Santa", async() =>{
-    ///[PASS] testGetSanta() (gas: 7832)
+    ///testGetSanta()
     expect(await santasList.target).to.not.equal(0);
     expect (await santatoken.target).to.not.equal(0);
     expect (await santasList.getSanta()).to.eq(santa.address);  
@@ -71,7 +51,7 @@ describe("Santas List Contract", function(){
     });
 
     it("Setting user1 to nice list and checking permissions Only SANTA", async() => {
-      //[PASS] testCheckList() (gas: 18069)
+      //testCheckList()
     await santasList.connect(santa).checkList(user1.address, Status.NICE);
     expect(await santasList.getNaughtyOrNiceOnce(user1.address)).to.eq(0);
     });
@@ -85,8 +65,8 @@ describe("Santas List Contract", function(){
 
 
      it("CheckList twice, can not have list different then once and permissions Only Santa ".gray ,async() => {
-      //[PASS] testCantCheckListTwiceWithDifferentThanOnce() (gas: 18843)
-      //[PASS] testCheckListTwice() (gas: 24927)
+      //testCantCheckListTwiceWithDifferentThanOnce()
+      //testCheckListTwice() 
      await expect(santasList.connect(user1).checkTwice(user1, Status.NICE)).to.be.revertedWithCustomError(santasList, 'SantasList__NotSanta()');
      await santasList.connect(santa).checkTwice(user1, Status.NAUGHTY);
      await santasList.connect(santa).checkTwice(user2, Status.NICE);
@@ -95,13 +75,13 @@ describe("Santas List Contract", function(){
      });
 
      it("Cannot collect presents earlier than  Xmas", async() =>{
-    //[PASS] testCantCollectPresentBeforeChristmas() (gas: 8349)
+    //testCantCollectPresentBeforeChristmas()
     await expect(santasList.connect(user2).collectPresent()).to.be.revertedWithCustomError(santasList, 'SantasList__NotChristmasYet()');
 
      });
 
      it("Collect Present - NICE LIST", async() => {
-      //[PASS] testCollectPresentNice() (gas: 96371)
+      //testCollectPresentNice()
 
       let xmasTime = (await santasList.CHRISTMAS_2023_BLOCK_TIME()).toString();
       await ethers.provider.send("evm_setNextBlockTimestamp", [ethers.toNumber(xmasTime)]);
@@ -111,7 +91,7 @@ describe("Santas List Contract", function(){
      });
       
      it("Collect Present - Cannot collect present if already collected", async() => {
-      //[PASS] testCantCollectPresentIfAlreadyCollected() (gas: 96097)
+      //testCantCollectPresentIfAlreadyCollected()
       await expect(santasList.connect(user2).collectPresent()).to.be.revertedWithCustomError(santasList, 'SantasList__AlreadyCollected()');  
      });
 
@@ -145,21 +125,18 @@ describe("Santas List Contract", function(){
     it("Buy Present - Anyone that has SantaTokens", async() =>{
       let balance = await santatoken.balanceOf(user4.address);
       await santatoken.connect(user4).approve(santasList.target, balance);
-
-
       await santasList.connect(user4).buyPresent(user4.address);
-      //expect(await santasList.getBalanceOf(user1.address)).to.eq(1);
+ 
     });
 
 
     it("MINT Token:  Only SantaList Contract", async() =>{
        await expect(santatoken.connect(user1).mint(user1)).to.be.revertedWithCustomError(santatoken, 'SantaToken__NotSantasList()');
-      //expect(await santasList.getBalanceOf(user1.address)).to.eq(1);
+
     });
 
     it("Burn Token: Only SantaList Contract", async() =>{
       await expect(santatoken.connect(user1).burn(user1)).to.be.revertedWithCustomError(santatoken, 'SantaToken__NotSantasList()');
-     //expect(await santasList.getBalanceOf(user1.address)).to.eq(1);
    });
 
    it("EXPLOIT:  No LIMIT POC - NFT / TOKEN MINT forever".red, async() =>{
@@ -175,19 +152,7 @@ describe("Santas List Contract", function(){
     await santasList.connect(attacker).transferFrom(attacker.address, hackContract.target, i);
     await santasList.connect(attacker).collectPresent();
     }
-
-  
-   
-
-
    });
-
-
-
-  
-
-
-      ///[PASS] testBuyPresent() (gas: 204348)
 
 });
 
