@@ -4,13 +4,6 @@
 
 # KRYPTONOMOUS-B Findings
 
-- [About](#about)
-  - [SantasList](#santaslist)
-    - [List Checking](#list-checking)
-    - [Collecting Presents](#collecting-presents)
-  - [SantaToken](#santatoken)
-  - [TokenUri.sol](#tokenurisol)
-
 # Tools Used:  HardHat TypeScript
 
 Test File is located -  ./test/SantaTest.ts
